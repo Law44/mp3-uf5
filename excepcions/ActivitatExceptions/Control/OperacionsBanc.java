@@ -5,9 +5,8 @@ import excepcions.ActivitatExceptions.Model.CompteEstalvi;
 
 public class OperacionsBanc {
 
-
     public static boolean verifyDNI(String dni) {
-        //TODO implementar fòrnula de verificació del DNI
-        return true;
+        ValidarDNI validarDNI = new ValidarDNI(dni); //Creamos una instancia de la clase que valida y le pasamos el dni
+        return validarDNI.validar(); //Devolvemos el valor que calcula
     }
 }
