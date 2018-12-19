@@ -1,14 +1,18 @@
 package excepcions.ActivitatExceptions.Model;
 
 import excepcions.ActivitatExceptions.Exceptions.BankAccountException;
+import excepcions.ActivitatExceptions.Exceptions.ClientAccountException;
 import excepcions.ActivitatExceptions.Exceptions.ExceptionMessage;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class CompteEstalvi {
+    private Scanner scanner = new Scanner(System.in);
     private String numCompte;
     private double saldo;
-    private List<Client> llista_usuaris;
+    private List<Client> llista_usuaris = new ArrayList<>();
 
     public CompteEstalvi(String numCompte) {
         this.numCompte = numCompte;
@@ -33,7 +37,7 @@ public class CompteEstalvi {
      @throws BankAccountException
      **/
     public int removeUser(String dni) throws BankAccountException {
-        if (llista_usuaris.size() != 1) {
+        if (llista_usuaris.size() > 1) {
             llista_usuaris.removeIf(u -> dni.equals(u.getDNI()));
             return llista_usuaris.size();
         }
@@ -44,8 +48,18 @@ public class CompteEstalvi {
      * Afegeix m diners al saldo
      * @param m
      */
-    public void ingressar(double m) {
-        saldo += m;
+    public void ingressar(double m) throws BankAccountException {
+        if (this.llista_usuaris.size() > 0) {
+            if (m > 0) {
+                saldo += m;
+            } else {
+                throw new BankAccountException(ExceptionMessage.TRANSFER_ERROR);
+            }
+        }
+        else {
+                throw new BankAccountException(ExceptionMessage.ACCOUNT_ZERO_USER);
+            }
+
     }
 
     /**
@@ -54,16 +68,28 @@ public class CompteEstalvi {
      * @throws BankAccountException
      */
     public void treure(double m) throws BankAccountException {
-        if (saldo >= m) saldo -= m;
-        else {throw new BankAccountException(ExceptionMessage.ACCOUNT_OVERDRAFT);}
+        if (this.llista_usuaris.size() > 0) {
+            if (saldo >= m) saldo -= m;
+            else {
+                throw new BankAccountException(ExceptionMessage.ACCOUNT_OVERDRAFT);
+            }
+        }
+        else {
+            throw new BankAccountException(ExceptionMessage.ACCOUNT_ZERO_USER);
+        }
     }
 
     public String getNumCompte() {
         return numCompte;
     }
 
-    public double getSaldo() {
-        return saldo;
+    public double getSaldo() throws BankAccountException {
+        if (this.llista_usuaris.size() > 0) {
+            return saldo;
+        }
+        else {
+            throw new BankAccountException(ExceptionMessage.ACCOUNT_ZERO_USER);
+        }
     }
 
     public List<Client> getLlista_usuaris() {

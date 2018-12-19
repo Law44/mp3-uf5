@@ -9,6 +9,8 @@ public class ExceptionMessage {
 
     //CLIENT MESSAGES
     public static final String WRONG_DNI = "DNI incorrecte";
+    public static final String DNI_NOT_FOUND = "DNI inexistent";
+
 
     //OPERATIONS
     public static final String TRANSFER_ERROR = "Error en la transferència";
